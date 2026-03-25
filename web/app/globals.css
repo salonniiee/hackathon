@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --border: #000000;
+  --gray: #888888;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-border: var(--border);
+  --color-gray: var(--gray);
+}
+
+* {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+input, select, textarea, button {
+  border-radius: 0 !important;
+}
+
+.brutalist-border {
+  border: 3px solid #000000;
+}
+
+.brutalist-border-thin {
+  border: 2px solid #000000;
+}
+
+.brutalist-button {
+  background: #000000;
+  color: #ffffff;
+  border: 3px solid #000000;
+  padding: 12px 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.brutalist-button:hover {
+  background: #ffffff;
+  color: #000000;
+}
+
+.brutalist-button-inverse {
+  background: #ffffff;
+  color: #000000;
+  border: 3px solid #000000;
+  padding: 12px 24px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.brutalist-button-inverse:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+.brutalist-input {
+  border: 3px solid #000000;
+  padding: 10px 14px;
+  background: #ffffff;
+  width: 100%;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.brutalist-input:focus {
+  outline: none;
+  background: #f0f0f0;
+}
+
+.brutalist-select {
+  border: 3px solid #000000;
+  padding: 10px 14px;
+  background: #ffffff;
+  font-family: 'Courier New', Courier, monospace;
+  cursor: pointer;
+}
+
+.brutalist-label {
+  font-weight: bold;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.nav-link {
+  padding: 8px 16px;
+  border: 2px solid #000000;
+  text-decoration: none;
+  color: #000000;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+.nav-link:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+.nav-link.active {
+  background: #000000;
+  color: #ffffff;
+}
+
+.table-header {
+  background: #000000;
+  color: #ffffff;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 12px;
+}
+
+.table-cell {
+  border: 2px solid #000000;
+  padding: 10px 12px;
+}
+
+.table-row:nth-child(even) {
+  background: #f5f5f5;
+}
+
+.badge {
+  padding: 4px 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.badge-class-i {
+  background: #000000;
+  color: #ffffff;
+}
+
+.badge-class-ii {
+  background: #888888;
+  color: #ffffff;
+}
+
+.badge-non-local {
+  border: 2px dashed #000000;
+  background: #ffffff;
+  color: #000000;
+}
+
+.badge-risk-high {
+  background: #000000;
+  color: #ffffff;
+  border: 3px solid #000000;
+}
+
+.badge-risk-medium {
+  background: #ffffff;
+  color: #000000;
+  border: 3px solid #000000;
+}
+
+.badge-risk-low {
+  background: #cccccc;
+  color: #000000;
+}
+
+.on-chain-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 2px solid #000000;
+  background: #f0f0f0;
+}
+
+.tx-hash {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  word-break: break-all;
+  background: #f5f5f5;
+  padding: 8px;
+  border: 2px solid #000000;
+}

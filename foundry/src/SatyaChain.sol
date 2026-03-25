@@ -13,6 +13,7 @@ contract SatyaChain {
     }
 
     mapping(bytes32 => ProductVerification) public products;
+    bytes32[] public productIds;
 
     event ProductStored(
         bytes32 indexed productId,
@@ -43,6 +44,8 @@ contract SatyaChain {
             verifier: msg.sender
         });
 
+        productIds.push(productId);
+
         emit ProductStored(
             productId,
             productName,
@@ -61,5 +64,13 @@ contract SatyaChain {
 
     function hasProduct(bytes32 productId) external view returns (bool) {
         return products[productId].timestamp != 0;
+    }
+
+    function getAllProductIds() external view returns (bytes32[] memory) {
+        return productIds;
+    }
+
+    function getProductCount() external view returns (uint256) {
+        return productIds.length;
     }
 }

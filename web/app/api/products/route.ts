@@ -1,10 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAllProducts, addProduct, calculateLocalPercentage, classifyProduct, calculateRisk, generateProductId, type Product } from '@/lib/store';
-import { storeProductOnChain, isConfigured, setBlockchainConfig } from '@/lib/blockchain';
+import { ethers } from 'ethers';
+import { calculateLocalPercentage, classifyProduct, calculateRisk, generateProductId, type Product, addProduct } from '@/lib/store';
+import { storeProductOnChain, isConfigured } from '@/lib/blockchain';
+
+const CONTRACT_ABI = [
+  'function productIds(uint256) view returns (bytes32)',
+  'function getProductCount() view returns (uint256)',
+  'function products(bytes32) view returns (bytes32,string,uint256,string,string,uint256,address)',
+];
 
 export async function GET() {
-  const products = getAllProducts();
-  return NextResponse.json({ success: true, products });
+  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || process.env.CONTRACT_ADDRESS;
+  const rpcUrl = process.env.RPC_URL || process.env.NEXT_PUBLIC_RPC_URL;
+
+  if (!contractAddress || !rpcUrl) {
+    return NextResponse.json({ success: false, error: 'Contract not configured' }, { status: 500 });
+  }
+
+  try {
+    const provider = new ethers.JsonRpcProvider(rpcUrl);
+    const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, provider);
+
+    const count = await contract.getProductCount();
+    const products = [];
+
+    for (let i = 0; i < Number(count); i++) {
+      const productId = await contract.productIds(i);
+      const result = await contract.products(productId);
+      
+      if (result && result[5] !== BigInt(0)) {
+        const localPercentage = Number(result[2]) / 100;
+
+        products.push({
+          id: result[0],
+          productName: result[1],
+          name: result[1],
+          localPercentage,
+          classification: result[3],
+          riskLevel: result[4],
+          timestamp: Number(result[5]),
+          verifier: result[6],
+        });
+      }
+    }
+
+    return NextResponse.json({ success: true, products });
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return NextResponse.json({ success: false, error: 'Failed to fetch products' }, { status: 500 });
+  }
 }
 
 export async function POST(request: NextRequest) {

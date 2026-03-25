@@ -5,8 +5,9 @@ import Link from 'next/link';
 
 interface Product {
   id: string;
-  name: string;
-  price: number;
+  name?: string;
+  productName?: string;
+  price?: number;
   localPercentage: number;
   classification: 'Class I' | 'Class II' | 'Non-local';
   riskLevel: 'HIGH' | 'MEDIUM' | 'LOW';
@@ -53,9 +54,9 @@ export default function DashboardPage() {
           <tbody>
             {products.map((product, index) => (
               <tr key={product.id} className="table-row">
-                <td className="table-cell font-bold">{product.name}</td>
-                <td className="table-cell text-right">₹{product.price.toLocaleString()}</td>
-                <td className="table-cell text-right">{product.localPercentage.toFixed(2)}%</td>
+                <td className="table-cell font-bold">{product.name || product.productName || 'Unknown'}</td>
+                <td className="table-cell text-right">{product.price ? `₹${product.price.toLocaleString()}` : '-'}</td>
+                <td className="table-cell text-right">{product.localPercentage?.toFixed(2) || '0.00'}%</td>
                 <td className="table-cell text-center">
                   <span className={`badge ${
                     product.classification === 'Class I' ? 'badge-class-i' :

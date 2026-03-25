@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ethers } from 'ethers';
 
 const CONTRACT_ABI = [
-  'function products(bytes32)(bytes32,string,uint256,string,string,uint256,address)',
+  'function products(bytes32) view returns (bytes32,string,uint256,string,string,uint256,address)',
 ];
 
 export async function GET(
@@ -26,7 +26,7 @@ export async function GET(
     
     const result = await contract.products(id);
     
-    if (!result || result.timestamp === BigInt(0)) {
+    if (!result || result[5] === BigInt(0)) {
       return NextResponse.json(
         { success: false, error: 'Product not found' },
         { status: 404 }
@@ -35,12 +35,12 @@ export async function GET(
 
     const product = {
       id: id,
-      productName: result.productName,
-      localPercentage: Number(result.localPercentage) / 100,
-      classification: result.classification,
-      riskLevel: result.riskLevel,
-      timestamp: Number(result.timestamp),
-      verifier: result.verifier,
+      productName: result[1],
+      localPercentage: Number(result[2]) / 100,
+      classification: result[3],
+      riskLevel: result[4],
+      timestamp: Number(result[5]),
+      verifier: result[6],
       txHash: '',
     };
 

@@ -98,3 +98,39 @@ export async function checkProductOnChain(productId: string): Promise<boolean> {
 export function isConfigured(): boolean {
   return config !== null;
 }
+
+import { type WalletClient } from 'viem'
+
+export async function storeProductWithSigner(
+  walletClient: WalletClient,
+  productId: string,
+  productName: string,
+  localPercentage: number,
+  classification: string,
+  riskLevel: string
+): Promise<string> {
+  const contractAddress = config?.contractAddress || process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+  if (!contractAddress) {
+    throw new Error('Contract address not configured');
+  }
+
+  const { account, transport } = walletClient;
+  if (!account) {
+    throw new Error('No account connected');
+  }
+  const provider = new ethers.BrowserProvider(transport);
+  const signer = await provider.getSigner(account.address);
+
+  const contract = new ethers.Contract(contractAddress, CONTRACT_ABI, signer);
+
+  const tx = await contract.storeProduct(
+    productId,
+    productName,
+    Math.round(localPercentage * 100),
+    classification,
+    riskLevel
+  );
+
+  const receipt = await tx.wait();
+  return receipt.hash;
+}

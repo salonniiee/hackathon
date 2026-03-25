@@ -46,19 +46,14 @@ export async function POST(request: NextRequest) {
     const useBlockchain = isConfigured();
     
     if (useBlockchain) {
-      try {
-        const txHash = await storeProductOnChain(
-          product.id,
-          product.name,
-          product.localPercentage,
-          product.classification,
-          product.riskLevel
-        );
-        product.txHash = txHash;
-      } catch (blockchainError) {
-        console.error('Blockchain error:', blockchainError);
-        product.txHash = 'BLOCKCHAIN_ERROR';
-      }
+      const txHash = await storeProductOnChain(
+        product.id,
+        product.name,
+        product.localPercentage,
+        product.classification,
+        product.riskLevel
+      );
+      product.txHash = txHash;
     } else {
       product.txHash = '0x' + Math.random().toString(16).slice(2, 66).padEnd(64, '0');
     }

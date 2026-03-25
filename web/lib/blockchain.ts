@@ -61,6 +61,12 @@ export async function storeProductOnChain(
   );
 
   const receipt = await tx.wait();
+  if (!receipt) {
+    throw new Error('Transaction failed: no receipt');
+  }
+  if (receipt.status === 0) {
+    throw new Error('Transaction failed: reverted on-chain');
+  }
   return receipt.hash;
 }
 
@@ -132,5 +138,11 @@ export async function storeProductWithSigner(
   );
 
   const receipt = await tx.wait();
+  if (!receipt) {
+    throw new Error('Transaction failed: no receipt');
+  }
+  if (receipt.status === 0) {
+    throw new Error('Transaction failed: reverted on-chain');
+  }
   return receipt.hash;
 }
